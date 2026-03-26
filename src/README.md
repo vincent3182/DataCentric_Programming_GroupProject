@@ -1,1 +1,0 @@
-#Data Centric Programming Collaboration Project#
