@@ -1,0 +1,9 @@
+#Dataset: Historical Weather Station Data available from NOAA / Met Éireann Historical Data in various CSV (structured), HTML tables (scraped)  and sizes ( ~25,000-75,000 readings). Some variables include: Temperature, precipitation, wind speed, atmospheric pressure, visibility#
+
+##Problem Set Task##
+
+1.Scrape additional weather data from web sources using Beautiful Soup
+2.Integrate scraped data with existing CSV datasets
+3.Perform statistical analysis (mean, variance, percentiles) using NumPy
+4.Create time-series visualisations with trend lines and confidence intervals
+5.Build a data pipeline that automates the entire process
