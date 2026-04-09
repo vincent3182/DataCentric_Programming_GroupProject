@@ -32,12 +32,19 @@ def ScrapeClimateAverages():
            if len(cols) == 14:
                 data.append(cols)
 
-        scraped_data = data[1:]
+        scraped_data = data[2:]
         
-        return scraped_data
+        column_names = data[1]
 
+        Normals30Yr_df = pd.DataFrame(scraped_data, columns = column_names)        
+        return Normals30Yr_df
+        #return scraped_data
 
-LoadCsv()
+daily_df = LoadCsv()
+
+print(daily_df.head())
+print(daily_df.columns.tolist())
+
 print("*" * 50)
 print("\nSuccesfully laoded csv file\n")
 
@@ -45,4 +52,5 @@ print("*" *50)
 print("\nScraped raw data - Malin Head\n")
 print("*" *50)
 
-print(ScrapeClimateAverages())
+normals_df = ScrapeClimateAverages()
+print(normals_df)
