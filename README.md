@@ -8,7 +8,7 @@
 |------|------|--------|
 | Vincent Mikalauskas | Data Engineer | [@vincent3182] |
 | [Name 2] | Data Analyst | [@username2] |
-| [Name 3] | Visualization Lead | [@username3] |
+| [Laurentiu Codreanu] | Visualization Lead | [@LaurCD] |
 | [Name 4] | Documentation Lead | [@username4] |
 
 ## Project Description
