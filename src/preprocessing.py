@@ -33,8 +33,7 @@ def clean_daily_data(df):
     
     print(f" Data ranges between: {df['date'].min()} to {df['date'].max()} \n")
     print(f"Total rows: {len(df)} \n")
-    print(f"Amount of missing values : {df.isnull().sum}")
-
+    
     return df
 
 
