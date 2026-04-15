@@ -33,3 +33,23 @@ def plot_monthly_temp(df, save_path=None):
 df = LoadCsv()
 plot_monthly_temp(df)
 
+def plot_monthly_rainfall(df,save_path=None):
+    """Bar chart of mean daily rainfall per month"""
+    df = df.copy()
+    df["date"] = pd.to_datetime(df["date"],dayfirst=True)
+    df["month_name"] = pd.Categorical(df["date"].dt.strftime("%b"), categories=MONTH_ORDER, ordered= True)
+    df["rain"] = pd.to_numeric(df["rain"],errors = "coerce")
+
+    monthly = df.groupby("month_name", observed = True)["rain"].mean().reset_index()
+
+    fig, ax = plt.subplots(figsize = (10,5))
+    sns.barplot(data=monthly, x = "month_name", y = "rain", palette ="Blues_d", ax = ax)
+    ax.set_title("Malin Head - Average Daily Rainfall by Month", fontsize=14)
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Mean Rainfall (mm)")
+    plt.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi=150)
+    plt.show()
+df = LoadCsv()
+plot_monthly_rainfall(df)
