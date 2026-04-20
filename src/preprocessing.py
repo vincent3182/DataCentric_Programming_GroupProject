@@ -81,6 +81,7 @@ def clean_scraped_data():
     print("*" * 50)
 
     print(result)
+    return result
 
 clean_scraped_data()
 
