@@ -19,5 +19,5 @@
 
 - **Name:** Malin Head
 - **Source:** https://www.met.ie/climate/available-data/historical-data
-- **Size:** [Approximate size]
+- **Size:** 25,000
 - **Format:** CSV
