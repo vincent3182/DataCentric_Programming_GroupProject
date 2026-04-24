@@ -1,6 +1,6 @@
 import pandas as pd
 from data_loading import LoadCsv
-from pre_processing import clean_daily_data, clean_scraped_data
+from preprocessing import clean_daily_data, clean_scraped_data
 
 
 def main():
@@ -57,7 +57,7 @@ def main():
     print("\n" + "*" * 50)
     print("NORMALS DATA")
     print("*" * 50)
-    print(normals_df.head())
+    print(normals_df)
 
 
 if __name__ == "__main__":

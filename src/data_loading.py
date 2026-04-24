@@ -42,8 +42,8 @@ def ScrapeClimateAverages():
 
 daily_df = LoadCsv()
 
-print(daily_df.head())
-print(daily_df.columns.tolist())
+#print(daily_df.head())
+#print(daily_df.columns.tolist())
 
 print("*" * 50)
 print("\nSuccesfully laoded csv file\n")
@@ -53,4 +53,4 @@ print("\nScraped raw data - Malin Head\n")
 print("*" *50)
 
 normals_df = ScrapeClimateAverages()
-print(normals_df)
+#print(normals_df)

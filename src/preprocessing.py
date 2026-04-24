@@ -83,9 +83,22 @@ def clean_scraped_data():
     print(result)
     return result
 
-clean_scraped_data()
+cleaned_normals = clean_scraped_data()
 
 df = LoadCsv()
 cleaned_csv = clean_daily_data(df)
 
-print(cleaned_csv)
+#print(cleaned_csv)
+
+def export_clean_data(daily_df,normals_df):
+    """exports both cleaned dataframes to processed folder as CSV"""
+
+    daily_df.to_csv('data/processed/daily_clean.csv', index= False)
+    print("exported: daily_clean.csv to /processed")
+    print("*"*50)
+
+    normals_df.to_csv('data/processed/normals_clean.csv', index= False)
+    print("exported: normals_clean.csv to /processed")
+    print("*"*50)
+
+export_clean_data(cleaned_csv,cleaned_normals)
