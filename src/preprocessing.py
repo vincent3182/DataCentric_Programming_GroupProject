@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from data_loading import ScrapeClimateAverages
 from data_loading import LoadCsv
 
