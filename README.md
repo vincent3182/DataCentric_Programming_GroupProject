@@ -7,9 +7,9 @@
 | Name | Role | GitHub |
 |------|------|--------|
 | Vincent Mikalauskas | Data Engineer | [@vincent3182] |
-| [Eric Meagher] | Data Analyst | [@ericmeagher] |
+| Eric Meagher| Data Analyst | @ericmeagher |
 | [Laurentiu Codreanu] | Visualization Lead | [@LaurCD] |
-| [Name 4] | Documentation Lead | [@username4] |
+| Eric Meagher | Documentation Lead | @ericmeagher |
 
 ## Project Description
 
