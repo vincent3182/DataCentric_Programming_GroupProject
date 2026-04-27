@@ -1,13 +1,12 @@
 import pandas as pd
 import numpy as np
 from data_loading import LoadCsv
-from preprocessing import clean_daily_data, clean_scraped_data
+from preprocessing import clean_daily_data
 
 
 def main():
     raw_df = LoadCsv()
     df = clean_daily_data(raw_df)
-    normals_df = clean_scraped_data()
 
     print("\n" + "*" * 50)
     print("DATA OVERVIEW")
@@ -23,6 +22,7 @@ def main():
     print(df.isna().sum())
 
     stats_columns = ["maxtp", "mintp", "meantp", "rain", "wdsp", "sun"]
+    stats_columns = [c for c in stats_columns if c in df.columns]
 
     print("\nSummary statistics:")
     print(df[stats_columns].describe())
@@ -36,14 +36,6 @@ def main():
         print("50th percentile:", round(np.percentile(values, 50), 2))
         print("75th percentile:", round(np.percentile(values, 75), 2))
 
-    print("\nKey findings:")
-    print("Average max temperature:", round(df["maxtp"].mean(), 2))
-    print("Average min temperature:", round(df["mintp"].mean(), 2))
-    print("Average mean temperature:", round(df["meantp"].mean(), 2))
-    print("Total rainfall:", round(df["rain"].sum(), 2))
-    print("Average wind speed:", round(df["wdsp"].mean(), 2))
-    print("Average sunshine:", round(df["sun"].mean(), 2))
-
     month_order = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
@@ -53,13 +45,14 @@ def main():
         ordered=True
     )
 
-    monthly = df.groupby("month_name")[["maxtp", "mintp", "meantp", "rain", "sun"]].mean()
+    monthly = df.groupby("month_name", observed=True)[["maxtp", "mintp", "meantp", "rain", "sun"]].mean()
+    yearly = df.groupby("year", observed=True)[["maxtp", "mintp", "meantp", "rain"]].mean()
+
     print("\n" + "*" * 50)
     print("MONTHLY AVERAGES")
     print("*" * 50)
     print(monthly)
 
-    yearly = df.groupby("year", observed=True)[["maxtp", "mintp", "meantp", "rain"]].mean()
     print("\n" + "*" * 50)
     print("YEARLY AVERAGES")
     print("*" * 50)
