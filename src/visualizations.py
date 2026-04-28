@@ -41,48 +41,19 @@ def plot_monthly_rainfall(daily_df,save_path=None):
     plt.show
 
 
-    
-#def plot_yearly_temp_trend(df, save_path = None):
-   # """Line chart of yearly mean man temperature with a trend line"""
-   # df = df.copy()
-    #df["date"] = pd.to_datetime(df["date"],dayfirst=True)
-    #df["year"] = df["date"].dt.year
-    #df["maxtp"] = pd.to_numeric(df["maxtp"],errors="coerce")
+    # [- Plot 2: Monthly Average Rainfall -]
 
-    #yearly = df.groupby("year")["maxtp"].mean().reset_index().dropna()
-    #z = np.polyfit(yearly["year"],yearly["maxtp"],1)
-    #trend = np.poly1d(z)
+    def plot_monthly_rainfall(daily_df,save_path=None):
+        """Bar chart of mean daily rainfall per month"""
+        monthly = get_monthly(daily_df)
 
-    #fig, ax = plt.subplots(figsize=(12,5))
-    #sns.lineplot(data=yearly, x = "year", y = "maxtp", color = "steelblue", marker = "o", markersize=4, ax = ax, label = "Annual mean max temp")
-    #ax.plot(yearly["year"],trend(yearly["year"]),color="red",linestyle="--", label="Trend")
-    #ax.set_title("Malin Head - Annual Mean Max Temperature with trend", fontsize=14)
-    #ax.set_xlabel("Year")
-    #ax.set_ylabel("Mean Max Temperature (Degrees C)")
-    #ax.legend()
-    #plt.tight_layout()
-    #if save_path:
-       # fig.savefig(save_path,dpi=150)
-   # plt.show()
-#df = LoadCsv()
-#plot_yearly_temp_trend(df)
-
-#def plot_wind_distrbution(df, save_path=None):
-    """Histogram of daily mean wind speed """
-    df = df.copy()
-    df["wdsp"] = pd.to_numeric(df["wdsp"], errors="coerce")
-    p90 = df["wdsp"].quantile(0,90)
-
-    fig, ax = plt.subplots(figsize=(9,5))
-    sns.histplot(df["wdsp"].dropna(), bins=30, kde=True, color="steelblue", ax = ax)
-    ax.axline(p90, color="red",linestyle="--", label=f"90th percentile({p90:.1f}kts")
-    ax.set_title("Malin Head - Wind Speed Distribution", fontsize=14)
-    ax.set_xlabel("Mean Wind Speed(knots)")
-    ax.set_ylabel("Number of Days")
-    ax.legend()
-    plt.tight_layout()
-    if save_path:
-        fig.savefig(save_path, dpi=150)
-    plt.show()
-#df = LoadCsv()
-#plot_wind_distrbution(df)    
+        fig, ax = plt.subplots(figsize=(10,5))
+        monthly["rain"].plot(kind="bar", color ="steelblue", ax=ax, width=0.6)
+        ax.set_title("Malin Head - Average Daily Rainfall by Month", fontsize=14)
+        ax.set_xlabel("Month")
+        ax.set_ylabel("Mean Rainfall (mm)")
+        ax.tick_params(axis="x", rotation=0)
+        plt.tight_layout()
+        if save_path:
+            fig.savepath(save_path, dpi = 150)
+        plt.show
