@@ -1,7 +1,7 @@
 import seaborn as sns
 import pandas as pd
 import numpy as np
-import matplotlib as plt
+from matplotlib import pyplot as plt
 
 sns.set_theme(style="whitegrid")
 
@@ -25,7 +25,7 @@ def get_monthly(daily_df):
 
 # [- Plot 1: Monthly Average temperature -]
 
-def plot_monthly_rainfall(daily_df,save_path=None):
+def plot_monthly_temp(daily_df,save_path=None):
     """Bar chart of mean max temperature per month"""
     monthly = get_monthly(daily_df)
 
@@ -38,25 +38,25 @@ def plot_monthly_rainfall(daily_df,save_path=None):
     plt.tight_layout()
     if save_path:
         fig.savefig(save_path, dpi = 150)
-    plt.show
+plt.show()
 
 
-    # [- Plot 2: Monthly Average Rainfall -]
+# [- Plot 2: Monthly Average Rainfall -]
 
-    def plot_monthly_rainfall(daily_df,save_path=None):
-        """Bar chart of mean daily rainfall per month"""
-        monthly = get_monthly(daily_df)
-
-        fig, ax = plt.subplots(figsize=(10,5))
-        monthly["rain"].plot(kind="bar", color ="steelblue", ax=ax, width=0.6)
-        ax.set_title("Malin Head - Average Daily Rainfall by Month", fontsize=14)
-        ax.set_xlabel("Month")
-        ax.set_ylabel("Mean Rainfall (mm)")
-        ax.tick_params(axis="x", rotation=0)
-        plt.tight_layout()
-        if save_path:
-            fig.savepath(save_path, dpi = 150)
-        plt.show
+def plot_monthly_rainfall(daily_df, save_path=None):
+    """Bar chart of mean daily rainfall per month."""
+    monthly = get_monthly(daily_df)
+ 
+    fig, ax = plt.subplots(figsize=(10, 5))
+    monthly["rain"].plot(kind="bar", color="steelblue", ax=ax, width=0.6)
+    ax.set_title("Malin Head — Average Daily Rainfall by Month", fontsize=14)
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Mean Rainfall (mm)")
+    ax.tick_params(axis="x", rotation=0)
+    plt.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi=150)
+    plt.show()
 
 # [- Plot 3: Yearly mean temperature with trend line -]
 def plot_yearly_temp_trend(daily_df, save_path=None):
@@ -72,13 +72,13 @@ def plot_yearly_temp_trend(daily_df, save_path=None):
     ax.plot(yearly.index, trend(yearly.index), color ="red", linestyle = "--", label = "Trend")
 
     ax.set_title("Malin Head - Yearly Mean Temperature with Trend", fontsize =14)
-    ax.set_xlable("Year")
+    ax.set_xlabel("Year")
     ax.set_ylabel("Mean Temperature (Degrees Celcius)")
     ax.legend()
     plt.tight_layout()
     if save_path:
         fig.savefig(save_path, dpi = 150)
-    plt.show
+    plt.show()
 
 # [- Plot 4: Wind Speed Histogram -]
 
@@ -122,4 +122,18 @@ def plot_actual_vs_normals(daily_df, normals_df, save_path=None):
     if save_path:
         fig.savefig(save_path, dpi = 150)
     plt.show()
+
+#[- Run All Plots -]
+
+if __name__ == "__main__":
+    daily_df, normals_df = load_data()
+ 
+    plot_monthly_temp(daily_df,save_path="outputs/figures/monthly_temp.png")
     
+    plot_monthly_rainfall(daily_df,save_path="outputs/figures/monthly_rainfall.png")
+    
+    plot_yearly_temp_trend(daily_df,save_path="outputs/figures/yearly_trend.png")
+    
+    plot_wind_distribution(daily_df,save_path="outputs/figures/wind_distribution.png")
+    
+    plot_actual_vs_normals(daily_df,normals_df,save_path="outputs/figures/actual_vs_normals.png")
