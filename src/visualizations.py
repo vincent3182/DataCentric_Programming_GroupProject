@@ -79,4 +79,23 @@ def plot_yearly_temp_trend(daily_df, save_path=None):
     if save_path:
         fig.savefig(save_path, dpi = 150)
     plt.show
+
+# [- Plot 4: Wind Speed Histogram -]
+
+def plot_wind_distribution(daily_df, save_path=None):
+    """Histogram of daily mean wind speed"""
+    wind = daily_df["wdsp"].dropna()
+    p90 = np.percentile(wind,90)
+
+    fig, ax = plt.subplots(figsize=(9,5))
+    ax.hist(wind, bins=30, color ="steelblue", edgecolor="white")
+    ax.axvline(p90, color="red",linestyle="--",label=f"90th percentile ({p90:.1f} kts)")
+    ax.set_title("Malin Head - Wind Speed Distribution", fontsize=14)
+    ax.set_xlabel("Mean Wind Speed (knots) ")
+    ax.set_ylabel("NUmber of Days")
+    ax.legend()
+    plt.tight_layout()
+    if save_path:
+        fig.savefig(save_path,dpi = 150)
+    plt.show()
     
