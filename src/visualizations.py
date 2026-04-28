@@ -57,3 +57,26 @@ def plot_monthly_rainfall(daily_df,save_path=None):
         if save_path:
             fig.savepath(save_path, dpi = 150)
         plt.show
+
+# [- Plot 3: Yearly mean temperature with trend line -]
+def plot_yearly_temp_trend(daily_df, save_path=None):
+    """Line chart of yearly mean temperature with a trend line"""
+    yearly = daily_df.groupby("year")["meantp"].mean().dropna()
+
+    z = np.polyfit(yearly.index, yearly.values, 1)
+    trend = np.poly1d(z)
+
+    fig, ax = plt.subplots(figsize=(12,5))
+    ax.plot(yearly.index,yearly.values,color = "steelblue", marker = "o",
+            markersize=3, label = "Yearly mean temp")
+    ax.plot(yearly.index, trend(yearly.index), color ="red", linestyle = "--", label = "Trend")
+
+    ax.set_title("Malin Head - Yearly Mean Temperature with Trend", fontsize =14)
+    ax.set_xlable("Year")
+    ax.set_ylabel("Mean Temperature (Degrees Celcius)")
+    ax.legend()
+    plt.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi = 150)
+    plt.show
+    
