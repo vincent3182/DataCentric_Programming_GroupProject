@@ -98,4 +98,28 @@ def plot_wind_distribution(daily_df, save_path=None):
     if save_path:
         fig.savefig(save_path,dpi = 150)
     plt.show()
+
+
+# [- Plot 5: Actual vs 30 Year Normals Comparison -]
+
+def plot_actual_vs_normals(daily_df, normals_df, save_path=None):
+    """Line chart comparing actual monthly mean temp against the 30-year normals
+    
+    This uses the scraped normals data alongside the daily records to show
+    whether recent temperatures sit above or below the long-term average"""
+
+    monthly = get_monthly(daily_df)
+
+    fig, ax = plt.subplots(figsize=(10,5))
+    ax.plot(MONTH_ORDER, monthly["meantp"].values, color ="tomato", marker = "o", label="Actual Mean temp")
+    ax.plot(MONTH_ORDER, normals_df["normals_meantp"].values, color = "steelblue", marker ="o", linestyle ="--", label = "30-year normal")
+
+    ax.set_title("Malin Head - Actual vs 30 Year Normal Temperature", fontsize = 14)
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Mean Temperature (Degrees Celcius)")
+    ax.legend()
+    plt.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi = 150)
+    plt.show()
     
