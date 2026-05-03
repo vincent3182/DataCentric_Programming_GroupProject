@@ -2,54 +2,138 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
-from data_loading import LoadCsv
-
 
 sns.set_theme(style="whitegrid")
+
 MONTH_ORDER = ["Jan", "Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 
-def LoadCsv():
-    """Loads csv file of Malin Head from Met Eireann"""
-    df = pd.read_csv('data/raw/dly1575.csv', skiprows= 24)
-    return df
+def load_data():
+    """Load the cleaned daily and normals datasets from the processed folder"""
+    daily_df = pd.read_csv("data/processed/daily_clean.csv", parse_dates=["date"])
+    normals_df = pd.read_csv("data/processed/normals_clean.csv")
+    normals_df.index = MONTH_ORDER
+    return daily_df, normals_df
 
-def plot_monthly_temp(df, save_path=None):
-    """Bar chart of mean max temperature per month."""
-    df = df.copy()
-    df["date"]= pd.to_datetime(df["date"],dayfirst=True)
-    df["month_name"] = pd.Categorical(
-        df["date"].dt.strftime("%b"), categories=MONTH_ORDER, ordered= True)
-    df["maxtp"] = pd.to_numeric(df["maxtp"],errors = "coerce")
-    monthly = df.groupby("month_name",observed= True)["maxtp"].mean().reset_index()
-    fig, ax = plt.subplots(figsize=(10,5))
-    sns.barplot(data=df, x="month_name",y="maxtp",palette="coolwarm",ax=ax)
-    ax.set_title("Malin Head - Average Max Temperature by Month", fontsize = 14)
-    ax.set_xlabel("Month")
-    ax.set_ylabel("Max Temperature (Degrees C)")
-    plt.tight_layout()
-    if save_path:
-        fig.savefig(save_path,dpi=150)    
-    plt.show()
-df = LoadCsv()
-plot_monthly_temp(df)
+def get_monthly(daily_df):
+    """Group daily data by month and return mean values"""
+    daily_df["month_name"]=pd.Categorical(
+        daily_df["date"].dt.strftime("%b"), categories= MONTH_ORDER, ordered=True)
+    return daily_df.groupby("month_name", observed=True)[
+        ["maxtp","mintp","meantp","rain","wdsp"]
+    ].mean()
+    
 
-def plot_monthly_rainfall(df,save_path=None):
-    """Bar chart of mean daily rainfall per month"""
-    df = df.copy()
-    df["date"] = pd.to_datetime(df["date"],dayfirst=True)
-    df["month_name"] = pd.Categorical(df["date"].dt.strftime("%b"), categories=MONTH_ORDER, ordered= True)
-    df["rain"] = pd.to_numeric(df["rain"],errors = "coerce")
+# [- Plot 1: Monthly Average temperature -]
 
-    monthly = df.groupby("month_name", observed = True)["rain"].mean().reset_index()
+def plot_monthly_temp(daily_df,save_path=None):
+    """Bar chart of mean max temperature per month"""
+    monthly = get_monthly(daily_df)
 
     fig, ax = plt.subplots(figsize = (10,5))
-    sns.barplot(data=monthly, x = "month_name", y = "rain", palette ="Blues_d", ax = ax)
-    ax.set_title("Malin Head - Average Daily Rainfall by Month", fontsize=14)
+    monthly["maxtp"].plot(kind="bar", color ="tomato", ax=ax, width=0.6)
+    ax.set_title("Malin Head - Average Max Temperature by Month", fontsize =14)
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Mean Max temperature ( Degrees C )")
+    ax.tick_params(axis="x",rotation=0)
+    plt.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi = 150)
+plt.show()
+
+
+# [- Plot 2: Monthly Average Rainfall -]
+
+def plot_monthly_rainfall(daily_df, save_path=None):
+    """Bar chart of mean daily rainfall per month."""
+    monthly = get_monthly(daily_df)
+ 
+    fig, ax = plt.subplots(figsize=(10, 5))
+    monthly["rain"].plot(kind="bar", color="steelblue", ax=ax, width=0.6)
+    ax.set_title("Malin Head — Average Daily Rainfall by Month", fontsize=14)
     ax.set_xlabel("Month")
     ax.set_ylabel("Mean Rainfall (mm)")
+    ax.tick_params(axis="x", rotation=0)
     plt.tight_layout()
     if save_path:
         fig.savefig(save_path, dpi=150)
     plt.show()
-df = LoadCsv()
-plot_monthly_rainfall(df)
+
+# [- Plot 3: Yearly mean temperature with trend line -]
+def plot_yearly_temp_trend(daily_df, save_path=None):
+    """Line chart of yearly mean temperature with a trend line"""
+    yearly = daily_df.groupby("year")["meantp"].mean().dropna()
+
+    z = np.polyfit(yearly.index, yearly.values, 1)
+    trend = np.poly1d(z)
+
+    fig, ax = plt.subplots(figsize=(12,5))
+    ax.plot(yearly.index,yearly.values,color = "steelblue", marker = "o",
+            markersize=3, label = "Yearly mean temp")
+    ax.plot(yearly.index, trend(yearly.index), color ="red", linestyle = "--", label = "Trend")
+
+    ax.set_title("Malin Head - Yearly Mean Temperature with Trend", fontsize =14)
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Mean Temperature (Degrees Celcius)")
+    ax.legend()
+    plt.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi = 150)
+    plt.show()
+
+# [- Plot 4: Wind Speed Histogram -]
+
+def plot_wind_distribution(daily_df, save_path=None):
+    """Histogram of daily mean wind speed"""
+    wind = daily_df["wdsp"].dropna()
+    p90 = np.percentile(wind,90)
+
+    fig, ax = plt.subplots(figsize=(9,5))
+    ax.hist(wind, bins=30, color ="steelblue", edgecolor="white")
+    ax.axvline(p90, color="red",linestyle="--",label=f"90th percentile ({p90:.1f} kts)")
+    ax.set_title("Malin Head - Wind Speed Distribution", fontsize=14)
+    ax.set_xlabel("Mean Wind Speed (knots) ")
+    ax.set_ylabel("NUmber of Days")
+    ax.legend()
+    plt.tight_layout()
+    if save_path:
+        fig.savefig(save_path,dpi = 150)
+    plt.show()
+
+
+# [- Plot 5: Actual vs 30 Year Normals Comparison -]
+
+def plot_actual_vs_normals(daily_df, normals_df, save_path=None):
+    """Line chart comparing actual monthly mean temp against the 30-year normals
+    
+    This uses the scraped normals data alongside the daily records to show
+    whether recent temperatures sit above or below the long-term average"""
+
+    monthly = get_monthly(daily_df)
+
+    fig, ax = plt.subplots(figsize=(10,5))
+    ax.plot(MONTH_ORDER, monthly["meantp"].values, color ="tomato", marker = "o", label="Actual Mean temp")
+    ax.plot(MONTH_ORDER, normals_df["normals_meantp"].values, color = "steelblue", marker ="o", linestyle ="--", label = "30-year normal")
+
+    ax.set_title("Malin Head - Actual vs 30 Year Normal Temperature", fontsize = 14)
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Mean Temperature (Degrees Celcius)")
+    ax.legend()
+    plt.tight_layout()
+    if save_path:
+        fig.savefig(save_path, dpi = 150)
+    plt.show()
+
+#[- Run All Plots -]
+
+if __name__ == "__main__":
+    daily_df, normals_df = load_data()
+ 
+    plot_monthly_temp(daily_df,save_path="outputs/figures/monthly_temp.png")
+    
+    plot_monthly_rainfall(daily_df,save_path="outputs/figures/monthly_rainfall.png")
+    
+    plot_yearly_temp_trend(daily_df,save_path="outputs/figures/yearly_trend.png")
+    
+    plot_wind_distribution(daily_df,save_path="outputs/figures/wind_distribution.png")
+    
+    plot_actual_vs_normals(daily_df,normals_df,save_path="outputs/figures/actual_vs_normals.png")
