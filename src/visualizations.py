@@ -66,26 +66,31 @@ def plot_monthly_aqi_trend(df, save_path=None):
         fig.savefig(save_path, dpi=150)
     plt.show()
 
-# [- Plot 3: Yearly mean temperature with trend line -]
-def plot_yearly_temp_trend(daily_df, save_path=None):
-    """Line chart of yearly mean temperature with a trend line"""
-    yearly = daily_df.groupby("year")["meantp"].mean().dropna()
-
-    z = np.polyfit(yearly.index, yearly.values, 1)
-    trend = np.poly1d(z)
-
-    fig, ax = plt.subplots(figsize=(12,5))
-    ax.plot(yearly.index,yearly.values,color = "steelblue", marker = "o",
-            markersize=3, label = "Yearly mean temp")
-    ax.plot(yearly.index, trend(yearly.index), color ="red", linestyle = "--", label = "Trend")
-
-    ax.set_title("Malin Head - Yearly Mean Temperature with Trend", fontsize =14)
-    ax.set_xlabel("Year")
-    ax.set_ylabel("Mean Temperature (Degrees Celcius)")
+# [- Plot 3: PM2.5 Distribution Histogram -]
+ 
+def plot_pm25_distribution(df, save_path=None):
+    """Histogram of PM2.5 readings across all cities.
+    
+    PM2.5 is the most harmful pollutant — this shows how often
+    dangerous levels occur. The red line marks the WHO guideline of 15 µg/m³.
+    """
+    pm25 = df["pm25"].dropna()
+    who_limit = 15
+    p90 = np.percentile(pm25, 90)
+ 
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.hist(pm25, bins=30, color="steelblue", edgecolor="white")
+    ax.axvline(who_limit, color="red", linestyle="--",
+               label=f"WHO guideline ({who_limit} µg/m³)")
+    ax.axvline(p90, color="orange", linestyle="--",
+               label=f"90th percentile ({p90:.1f} µg/m³)")
+    ax.set_title("Global Air Quality — PM2.5 Distribution", fontsize=14)
+    ax.set_xlabel("PM2.5 (µg/m³)")
+    ax.set_ylabel("Number of Readings")
     ax.legend()
     plt.tight_layout()
     if save_path:
-        fig.savefig(save_path, dpi = 150)
+        fig.savefig(save_path, dpi=150)
     plt.show()
 
 # [- Plot 4: Wind Speed Histogram -]
