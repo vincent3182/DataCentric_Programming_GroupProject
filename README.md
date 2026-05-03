@@ -12,6 +12,7 @@
 | Eric Meagher | Data Analyst / Documentation Lead | [@ericmeagher](https://github.com/ericmeagher) |
 | Laurentiu Codreanu | Visualization Lead | [@LaurCD](https://github.com/LaurCD) |
 
+
 ## Project Summary
 
 This project investigates daily weather observations from Malin Head to identify patterns in temperature, rainfall, wind speed, and sunshine. The raw dataset is first cleaned and prepared in Python, then explored using descriptive statistics and charts to highlight seasonal changes and overall variability in the weather data.
