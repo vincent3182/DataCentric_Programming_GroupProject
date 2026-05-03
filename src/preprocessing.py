@@ -9,7 +9,7 @@ def clean_data(raw_df):
         -handle missing values and outliers
     """
     
-    #rename Columns to simplify
+    #rename Columns to simplify, using dictionary
 
     renamed_columns = {
         
