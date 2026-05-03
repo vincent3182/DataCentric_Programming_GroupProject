@@ -93,23 +93,32 @@ def plot_pm25_distribution(df, save_path=None):
         fig.savefig(save_path, dpi=150)
     plt.show()
 
-# [- Plot 4: Wind Speed Histogram -]
-
-def plot_wind_distribution(daily_df, save_path=None):
-    """Histogram of daily mean wind speed"""
-    wind = daily_df["wdsp"].dropna()
-    p90 = np.percentile(wind,90)
-
-    fig, ax = plt.subplots(figsize=(9,5))
-    ax.hist(wind, bins=30, color ="steelblue", edgecolor="white")
-    ax.axvline(p90, color="red",linestyle="--",label=f"90th percentile ({p90:.1f} kts)")
-    ax.set_title("Malin Head - Wind Speed Distribution", fontsize=14)
-    ax.set_xlabel("Mean Wind Speed (knots) ")
-    ax.set_ylabel("NUmber of Days")
+# [- Plot 4: Average Pollutant Levels by City (Bar Chart) -]
+ 
+def plot_pollutants_by_city(df, save_path=None):
+    """Bar chart comparing mean PM2.5, NO2 and O3 levels across cities.
+    
+    Groups the three main pollutants side by side for each city
+    so they can be directly compared.
+    """
+    city_poll = df.groupby("city")[["pm25", "no2", "o3"]].mean().reset_index()
+ 
+    x = np.arange(len(city_poll["city"]))
+    width = 0.25
+ 
+    fig, ax = plt.subplots(figsize=(12, 5))
+    ax.bar(x - width, city_poll["pm25"], width, label="PM2.5", color="tomato")
+    ax.bar(x,         city_poll["no2"],  width, label="NO2",   color="steelblue")
+    ax.bar(x + width, city_poll["o3"],   width, label="O3",    color="seagreen")
+    ax.set_xticks(x)
+    ax.set_xticklabels(city_poll["city"], rotation=15)
+    ax.set_title("Global Air Quality — Mean Pollutant Levels by City", fontsize=14)
+    ax.set_xlabel("City")
+    ax.set_ylabel("Mean Concentration (µg/m³ or ppb)")
     ax.legend()
     plt.tight_layout()
     if save_path:
-        fig.savefig(save_path,dpi = 150)
+        fig.savefig(save_path, dpi=150)
     plt.show()
 
 
