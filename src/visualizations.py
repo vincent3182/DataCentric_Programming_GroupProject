@@ -24,22 +24,25 @@ def get_monthly(daily_df):
     ].mean()
     
 
-# [- Plot 1: Monthly Average temperature -]
-
-def plot_monthly_temp(daily_df,save_path=None):
-    """Bar chart of mean max temperature per month"""
-    monthly = get_monthly(daily_df)
-
-    fig, ax = plt.subplots(figsize = (10,5))
-    monthly["maxtp"].plot(kind="bar", color ="tomato", ax=ax, width=0.6)
-    ax.set_title("Malin Head - Average Max Temperature by Month", fontsize =14)
-    ax.set_xlabel("Month")
-    ax.set_ylabel("Mean Max temperature ( Degrees C )")
-    ax.tick_params(axis="x",rotation=0)
+# [- Plot 1: Average AQI by City -]
+ 
+def plot_aqi_by_city(df, save_path=None):
+    """Bar chart showing mean AQI for each city.
+    
+    Shows which cities have the worst and best air quality on average.
+    """
+    city_aqi = df.groupby("city")["aqi"].mean().sort_values(ascending=False).reset_index()
+ 
+    fig, ax = plt.subplots(figsize=(11, 5))
+    sns.barplot(data=city_aqi, x="city", y="aqi", palette="Reds_d", ax=ax)
+    ax.set_title("Global Air Quality — Average AQI by City", fontsize=14)
+    ax.set_xlabel("City")
+    ax.set_ylabel("Mean AQI")
+    ax.tick_params(axis="x", rotation=15)
     plt.tight_layout()
     if save_path:
-        fig.savefig(save_path, dpi = 150)
-plt.show()
+        fig.savefig(save_path, dpi=150)
+    plt.show()
 
 
 # [- Plot 2: Monthly Average Rainfall -]
