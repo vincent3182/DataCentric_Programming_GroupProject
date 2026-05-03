@@ -122,29 +122,33 @@ def plot_pollutants_by_city(df, save_path=None):
     plt.show()
 
 
-# [- Plot 5: Actual vs 30 Year Normals Comparison -]
-
-def plot_actual_vs_normals(daily_df, normals_df, save_path=None):
-    """Line chart comparing actual monthly mean temp against the 30-year normals
+# [- Plot 5: Rolling Average AQI for Top 3 Polluted Cities (Line Chart) -]
+ 
+def plot_rolling_aqi(df, save_path=None):
+    """Line chart of 30-day rolling average AQI for the 3 most polluted cities.
     
-    This uses the scraped normals data alongside the daily records to show
-    whether recent temperatures sit above or below the long-term average"""
-
-    monthly = get_monthly(daily_df)
-
-    fig, ax = plt.subplots(figsize=(10,5))
-    ax.plot(MONTH_ORDER, monthly["meantp"].values, color ="tomato", marker = "o", label="Actual Mean temp")
-    ax.plot(MONTH_ORDER, normals_df["normals_meantp"].values, color = "steelblue", marker ="o", linestyle ="--", label = "30-year normal")
-
-    ax.set_title("Malin Head - Actual vs 30 Year Normal Temperature", fontsize = 14)
-    ax.set_xlabel("Month")
-    ax.set_ylabel("Mean Temperature (Degrees Celcius)")
+    Rolling averages smooth out daily noise and reveal the underlying
+    pollution trend over the year.
+    """
+    top3_cities = df.groupby("city")["aqi"].mean().nlargest(3).index.tolist()
+    df_top3 = df[df["city"].isin(top3_cities)].copy()
+    df_top3 = df_top3.sort_values("date")
+ 
+    fig, ax = plt.subplots(figsize=(12, 5))
+ 
+    for city in top3_cities:
+        city_df = df_top3[df_top3["city"] == city].set_index("date")
+        rolling = city_df["aqi"].rolling(window=30, min_periods=1).mean()
+        ax.plot(rolling.index, rolling.values, marker="", linewidth=2, label=city)
+ 
+    ax.set_title("Global Air Quality — 30-Day Rolling Average AQI (Top 3 Cities)", fontsize=14)
+    ax.set_xlabel("Date")
+    ax.set_ylabel("AQI (30-day rolling mean)")
     ax.legend()
     plt.tight_layout()
     if save_path:
-        fig.savefig(save_path, dpi = 150)
+        fig.savefig(save_path, dpi=150)
     plt.show()
-
 #[- Run All Plots -]
 
 if __name__ == "__main__":
