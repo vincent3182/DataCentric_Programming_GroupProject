@@ -45,18 +45,22 @@ def plot_aqi_by_city(df, save_path=None):
     plt.show()
 
 
-# [- Plot 2: Monthly Average Rainfall -]
-
-def plot_monthly_rainfall(daily_df, save_path=None):
-    """Bar chart of mean daily rainfall per month."""
-    monthly = get_monthly(daily_df)
+# [- Plot 2: Monthly Average AQI Trend (Line Chart) -]
+ 
+def plot_monthly_aqi_trend(df, save_path=None):
+    """Line chart of average AQI per month across all cities.
+    
+    Shows whether air quality gets better or worse at certain times of year.
+    """
+    monthly = df.groupby("month_name", observed=True)["aqi"].mean().reset_index()
  
     fig, ax = plt.subplots(figsize=(10, 5))
-    monthly["rain"].plot(kind="bar", color="steelblue", ax=ax, width=0.6)
-    ax.set_title("Malin Head — Average Daily Rainfall by Month", fontsize=14)
+    ax.plot(monthly["month_name"], monthly["aqi"], color="tomato",
+            marker="o", markersize=6, label="Mean AQI")
+    ax.set_title("Global Air Quality — Average AQI by Month", fontsize=14)
     ax.set_xlabel("Month")
-    ax.set_ylabel("Mean Rainfall (mm)")
-    ax.tick_params(axis="x", rotation=0)
+    ax.set_ylabel("Mean AQI")
+    ax.legend()
     plt.tight_layout()
     if save_path:
         fig.savefig(save_path, dpi=150)
