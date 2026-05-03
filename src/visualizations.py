@@ -8,11 +8,12 @@ sns.set_theme(style="whitegrid")
 MONTH_ORDER = ["Jan", "Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 
 def load_data():
-    """Load the cleaned daily and normals datasets from the processed folder"""
-    daily_df = pd.read_csv("data/processed/daily_clean.csv", parse_dates=["date"])
-    normals_df = pd.read_csv("data/processed/normals_clean.csv")
-    normals_df.index = MONTH_ORDER
-    return daily_df, normals_df
+    """Load the cleaned Air Quality dataset from the processed folder."""
+    df = pd.read_csv("data/processed/Air_Quality_clean.csv", parse_dates=["date"])
+    df["month_name"] = pd.Categorical(
+        df["date"].dt.strftime("%b"), categories=MONTH_ORDER, ordered=True
+    )
+    return df
 
 def get_monthly(daily_df):
     """Group daily data by month and return mean values"""
