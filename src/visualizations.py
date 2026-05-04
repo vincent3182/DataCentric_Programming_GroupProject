@@ -149,17 +149,14 @@ def plot_rolling_aqi(df, save_path=None):
     if save_path:
         fig.savefig(save_path, dpi=150)
     plt.show()
-#[- Run All Plots -]
 
-if __name__ == "__main__":
-    daily_df, normals_df = load_data()
+# [- Run All Plots -]
  
-    plot_monthly_temp(daily_df,save_path="outputs/figures/monthly_temp.png")
-    
-    plot_monthly_rainfall(daily_df,save_path="outputs/figures/monthly_rainfall.png")
-    
-    plot_yearly_temp_trend(daily_df,save_path="outputs/figures/yearly_trend.png")
-    
-    plot_wind_distribution(daily_df,save_path="outputs/figures/wind_distribution.png")
-    
-    plot_actual_vs_normals(daily_df,normals_df,save_path="outputs/figures/actual_vs_normals.png")
+if __name__ == "__main__":
+    df = load_data()
+ 
+    plot_aqi_by_city(df,save_path="outputs/figures/aqi_by_city.png")
+    plot_monthly_aqi_trend(df,save_path="outputs/figures/monthly_aqi_trend.png")
+    plot_pm25_distribution(df,save_path="outputs/figures/pm25_distribution.png")
+    plot_pollutants_by_city(df,save_path="outputs/figures/pollutants_by_city.png")
+    plot_rolling_aqi(df,save_path="outputs/figures/rolling_aqi.png")
