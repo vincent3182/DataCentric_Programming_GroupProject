@@ -30,18 +30,20 @@ The goal is to turn raw air quality measurements into a clearer picture of globa
 
 ## Data Used
 
-- Daily weather records from Malin Head.
+- Globail Air Quality dataset covering 10 cities across 2024
 - Main variables analysed:
-  - Maximum temperature.
-  - Minimum temperature.
-  - Rainfall.
-  - Wind speed.
-  - Sunshine.
+  - AQI (Air Quality Index)
+  - PM2.5 and PM10 (particulate matter)
+  - NO2 (nitrogen dioxide)
+  - SO2 (sulphur dioxide)
+  - CO (carbon monoxide)
+  - O3 (ozone)
+  - Temperature, humidity, wind speed
 
 ## Folder Layout
 
 ```bash
-WeatherProject/
+DataCentric_Programming_GroupProject/
 ├── data/
 │   ├── raw/
 │   └── processed/
@@ -59,30 +61,36 @@ WeatherProject/
 ## Data Preparation
 
 Before analysis, the dataset was prepared using the following steps:
-- Converted the date column to a proper date format.
-- Removed columns that were not needed for the project.
-- Converted weather values into numeric format.
-- Checked for missing values and handled them appropriately.
-- Added useful derived fields such as year, month, and mean temperature.
+- Renamed columns to cleaner, lowercase names.
+- Converted the date column to a proper datetime format.
+- Extracted month and year as separate columns.
+- Converted all pollutant measurements to numeric format.
+- Detected and capped outliers using the IQR method.
+- Filled remaining missing values with column medians.
+- Exported the cleaned data as both CSV and JSON.
 
 ## Analysis Workflow
 
 ### 1. Loading the Data
-- Import the raw weather file into Python using Pandas.
+- Import the raw air quality CSV file into Python using Pandas.
 - Inspect the data structure, column names, and basic format.
 
 ### 2. Cleaning the Dataset
-- Remove or fix invalid values.
-- Convert data types where needed.
-- Make sure the data is ready for analysis.
+- Rename and standardise columns.
+- Handle missing values and outliers.
+- Extract temporal features from the date column.
 
 ### 3. Descriptive Statistics
-- Calculate mean, median, minimum, maximum, standard deviation, variance, and percentiles.
-- Summarise the key weather variables.
+- Calculate mean, median, variance, and percentiles for each pollutant
+- Summarise AQI and pollutant levels by city and by month.
+- Compute rolling averages to identify pollution trends over time.
 
 ### 4. Visualisation
-- Create charts to show monthly and yearly patterns.
-- Compare trends in temperature, rainfall, and wind speed.
+- Compare AQI levels across cities.
+- Show how pollution changes month by month.
+- Visualise the distribution of PM2.5 against WHO guidelines.
+- Compare key pollutants side by side across cities.
+- Plot 30-day rolling average AQI for the most polluted cities.
 
 ## Technical Notes
 
@@ -120,6 +128,10 @@ python src/preprocessing.py
 ### 4. Run analysis
 ```bash
 python src/analysis.py
+```
+### 5. Run visualizations
+```bash
+python src/visualizations.py
 ```
 
 ## License
