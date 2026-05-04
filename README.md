@@ -1,8 +1,8 @@
-# Malin Head Weather Pattern Analysis
+# Global Air Quality Analysis
 
 **Course:** Data-Centric Programming  
-**Domain:** Climate and Weather Data Analysis  
-**Project Focus:** Exploring weather trends at Malin Head through cleaning, statistical analysis, and visualisation
+**Domain:** Enviromental Monitoring
+**Project Focus:** Exploring air quality patterns across 10 major cities using AQI and pollutant data
 
 ## Team Members
 
@@ -15,9 +15,9 @@
 
 ## Project Summary
 
-This project investigates daily weather observations from Malin Head to identify patterns in temperature, rainfall, wind speed, and sunshine. The raw dataset is first cleaned and prepared in Python, then explored using descriptive statistics and charts to highlight seasonal changes and overall variability in the weather data.
+This project analyses daily air quality readings from 10 major cities across 9 countries to identify pollution patterns across locations throughout the year. The raw dataset is loaded, cleaned, and prepared in Python, then explored using descriptive statistics and visualizations to highlight differences in pollutant levels between cities and across months.
 
-The goal of the project is to turn the raw measurements into a clearer story about local weather behaviour over time. By using summary statistics such as mean, median, percentiles, variance, and standard deviation, the analysis gives both a general overview and a better sense of how spread out the data is.
+The goal is to turn raw air quality measurements into a clearer picture of global pollution trends. Summary statistics such as mean, variance, percentiles, and rolling averages are used to give both a general overview and a deeper understanding of how pollutant levels are distributed and how they change over time.
 
 ## Main Insights
 
