@@ -2,6 +2,7 @@
 
 **Course:** Data-Centric Programming  
 **Domain:** Enviromental Monitoring
+
 **Project Focus:** Exploring air quality patterns across 10 major cities using AQI and pollutant data
 
 ## Team Members
@@ -21,11 +22,11 @@ The goal is to turn raw air quality measurements into a clearer picture of globa
 
 ## Main Insights
 
-- Weather conditions vary noticeably across the year.
-- Temperature follows a strong seasonal cycle, with warmer periods and colder periods clearly visible.
-- Rainfall and wind speed are less stable and show greater variation.
-- Percentiles help describe the typical range of values in the dataset.
-- Standard deviation and variance show how widely the weather measurements are distributed.
+- AQI levels vary significantly across cities, with some cities consistently recording dangerous levels.
+- PM2.5 is the most commonly exceeded pollutant relative to WHO guidelines.
+- Air quality shows seasonal patterns, with certain months recording higher average AQI
+- Rolling averages reveal underlying pollution trends that daily readings alone can obscure.
+- Pollutant types differ by city, with some cities more affected by NO2 and others by PM2.5 or O3,
 
 ## Data Used
 
