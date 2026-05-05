@@ -2,6 +2,7 @@
 
 **Course:** Data-Centric Programming  
 **Domain:** Enviromental Monitoring
+
 **Dataset Source:** https://www.kaggle.com/datasets/syedmtalhahasan/global-urban-air-quality-index-dataset-2015-2025
 
 **Project Focus:** Exploring air quality patterns across 10 major cities using AQI and pollutant data
