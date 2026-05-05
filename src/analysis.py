@@ -1,62 +1,97 @@
+import os
 import pandas as pd
 import numpy as np
-from data_loading import LoadCsv
-from preprocessing import clean_daily_data
+from preprocessing import clean_data
+from data_loading import load_csv
+
+
+def descriptive_stats(df, columns):
+    """Return descriptive statistics for selected numeric columns."""
+    stats = {}
+
+    for col in columns:
+        if col in df.columns:
+            values = df[col].dropna()
+
+            stats[col] = {
+                "mean": np.mean(values),
+                "median": np.median(values),
+                "std_dev": np.std(values, ddof=1),
+                "variance": np.var(values, ddof=1),
+                "min": np.min(values),
+                "25th_percentile": np.percentile(values, 25),
+                "50th_percentile": np.percentile(values, 50),
+                "75th_percentile": np.percentile(values, 75),
+                "max": np.max(values)
+            }
+
+    return pd.DataFrame(stats).T
+
+
+def city_summary(df):
+    """Return average AQI and pollutant values by city."""
+    summary = df.groupby("city")[["aqi", "pm25", "pm10", "no2", "so2", "co", "o3"]].mean()
+    return summary.round(2)
+
+
+def country_summary(df):
+    """Return average AQI and pollutant values by country."""
+    summary = df.groupby("country")[["aqi", "pm25", "pm10", "no2", "so2", "co", "o3"]].mean()
+    return summary.round(2)
+
+
+def monthly_summary(df):
+    """Return monthly average AQI and pollutant values."""
+    summary = df.groupby("month")[["aqi", "pm25", "pm10", "no2", "so2", "co", "o3"]].mean()
+    return summary.round(2)
 
 
 def main():
-    raw_df = LoadCsv()
-    df = clean_daily_data(raw_df)
+    raw_df = load_csv()
+    df = clean_data(raw_df)
 
-    print("\n" + "*" * 50)
-    print("DATA OVERVIEW")
+    numeric_columns = [
+        "aqi", "pm25", "pm10", "no2", "so2",
+        "co", "o3", "temperature", "humidity", "wind_speed"
+    ]
+
     print("*" * 50)
+    print("DATASET OVERVIEW")
+    print(df.head())
+    print("\nShape:", df.shape)
 
-    print("\nColumns:")
-    print(df.columns.tolist())
+    print("*" * 50)
+    print("MISSING VALUES")
+    print(df[numeric_columns].isnull().sum())
 
-    print("\nDate range:")
-    print(df["date"].min(), "to", df["date"].max())
+    print("*" * 50)
+    print("DESCRIPTIVE STATISTICS")
+    stats_df = descriptive_stats(df, numeric_columns)
+    print(stats_df.round(2))
 
-    print("\nMissing values:")
-    print(df.isna().sum())
+    print("*" * 50)
+    print("AVERAGE VALUES BY CITY")
+    city_df = city_summary(df)
+    print(city_df)
 
-    stats_columns = ["maxtp", "mintp", "meantp", "rain", "wdsp", "sun"]
-    stats_columns = [c for c in stats_columns if c in df.columns]
+    print("*" * 50)
+    print("AVERAGE VALUES BY COUNTRY")
+    country_df = country_summary(df)
+    print(country_df)
 
-    print("\nSummary statistics:")
-    print(df[stats_columns].describe())
-
-    print("\nVariance and percentiles:")
-    for col in stats_columns:
-        values = df[col].dropna()
-        print(f"\n{col.upper()}:")
-        print("Variance:", round(np.var(values, ddof=1), 2))
-        print("25th percentile:", round(np.percentile(values, 25), 2))
-        print("50th percentile:", round(np.percentile(values, 50), 2))
-        print("75th percentile:", round(np.percentile(values, 75), 2))
-
-    month_order = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-
-    df["month_name"] = pd.Categorical(
-        df["date"].dt.strftime("%b"),
-        categories=month_order,
-        ordered=True
-    )
-
-    monthly = df.groupby("month_name", observed=True)[["maxtp", "mintp", "meantp", "rain", "sun"]].mean()
-    yearly = df.groupby("year", observed=True)[["maxtp", "mintp", "meantp", "rain"]].mean()
-
-    print("\n" + "*" * 50)
+    print("*" * 50)
     print("MONTHLY AVERAGES")
-    print("*" * 50)
-    print(monthly)
+    monthly_df = monthly_summary(df)
+    print(monthly_df)
 
-    print("\n" + "*" * 50)
-    print("YEARLY AVERAGES")
+    os.makedirs("data/processed", exist_ok=True)
+    stats_df.round(2).to_csv("data/processed/descriptive_statistics.csv")
+    city_df.to_csv("data/processed/city_summary.csv")
+    country_df.to_csv("data/processed/country_summary.csv")
+    monthly_df.to_csv("data/processed/monthly_summary.csv")
+
     print("*" * 50)
-    print(yearly)
+    print("Analysis results exported to data/processed")
 
 
 if __name__ == "__main__":
