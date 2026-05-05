@@ -81,9 +81,10 @@ Before analysis, the dataset was prepared using the following steps:
 - Extract temporal features from the date column.
 
 ### 3. Descriptive Statistics
-- Calculate mean, median, variance, and percentiles for each pollutant
-- Summarise AQI and pollutant levels by city and by month.
+- Calculate mean, median, variance, and percentiles for each pollutant.
+- Summarise AQI and pollutant levels by city, country, and by month.
 - Compute rolling averages to identify pollution trends over time.
+- Export summary results to CSV files in data/processed.
 
 ### 4. Visualisation
 - Compare AQI levels across cities.
