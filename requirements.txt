@@ -1,9 +1,25 @@
-#Dataset: Historical Weather Station Data available from NOAA / Met Éireann Historical Data in various CSV (structured), HTML tables (scraped)  and sizes ( ~25,000-75,000 readings). Some variables include: Temperature, precipitation, wind speed, atmospheric pressure, visibility#
+## Dataset
 
-Problem Set Task
+This project uses historical air quality data collected from structured CSV files and additional tabular web data that can be scraped from HTML pages. The dataset contains a large number of observations and includes measurements related to air quality across different cities, countries, and time periods.
 
-1.Scrape additional weather data from web sources using Beautiful Soup
-2.Integrate scraped data with existing CSV datasets
-3.Perform statistical analysis (mean, variance, percentiles) using NumPy
-4.Create time-series visualisations with trend lines and confidence intervals
-5.Build a data pipeline that automates the entire process
+Key variables in the dataset include:
+- Air Quality Index (AQI)
+- PM2.5
+- PM10
+- NO2
+- SO2
+- CO
+- O3
+- Temperature
+- Humidity
+- Wind speed
+
+These variables support the analysis of pollution levels, geographic variation, and seasonal trends in air quality. [file:693]
+
+## Problem Set Tasks
+
+1. Scrape additional air quality data from web sources using Beautiful Soup.
+2. Integrate the scraped data with the existing CSV datasets.
+3. Perform statistical analysis, including mean, variance, and percentiles, using NumPy.
+4. Create time-series visualisations with trend lines and confidence intervals.
+5. Build a data pipeline that automates the full process. [file:693]
