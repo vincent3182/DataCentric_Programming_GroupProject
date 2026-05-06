@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from preprocessing import clean_data
-from data_loading import load_csv
+from data_loading import LoadCsv
 
 def descriptive_stats(df, columns):
     stats = {}
@@ -31,7 +31,7 @@ def monthly_summary(df):
     return df.groupby("month")[["aqi", "pm25", "pm10", "no2", "so2", "co", "o3"]].mean().round(2)
 
 def main():
-    raw_df = load_csv()
+    raw_df = LoadCsv()
     df = clean_data(raw_df)
 
     numeric_columns = ["aqi", "pm25", "pm10", "no2", "so2", "co", "o3", "temperature", "humidity", "wind_speed"]
