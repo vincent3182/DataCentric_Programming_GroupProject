@@ -14,12 +14,11 @@ Key variables in the dataset include:
 - Humidity
 - Wind speed
 
-These variables support the analysis of pollution levels, geographic variation, and seasonal trends in air quality. [file:693]
+These variables support the analysis of pollution levels, geographic variation, and seasonal trends in air quality.
 
 ## Problem Set Tasks
-
 1. Scrape additional air quality data from web sources using Beautiful Soup.
 2. Integrate the scraped data with the existing CSV datasets.
 3. Perform statistical analysis, including mean, variance, and percentiles, using NumPy.
 4. Create time-series visualisations with trend lines and confidence intervals.
-5. Build a data pipeline that automates the full process. [file:693]
+5. Build a data pipeline that automates the full process.
